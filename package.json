@@ -1,0 +1,19 @@
+{
+  "name": "image-optimizer",
+  "version": "0.0.1",
+  "description": "image optimizer for ferris project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sevy07/image-optimizer.git"
+  },
+  "author": "sevy07",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sevy07/image-optimizer/issues"
+  },
+  "homepage": "https://github.com/sevy07/image-optimizer#readme"
+}
