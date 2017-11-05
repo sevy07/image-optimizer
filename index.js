@@ -1,11 +1,12 @@
-var im = require('imagemagick');
+const im = require('imagemagick');
+const fs = require('fs');
+const path = require('path');
+const rimraf = require('rimraf');
 
-var inputPath = './input/proposal-maria-wild.png';
-var outputPath = './output/proposal-maria-wild.png';
-var width = 300; // output width in pixels
+const inputPath = './input/';
+const width = 300; // output width in pixels
 
-var args = [
-  inputPath,
+const optimizeOptions = [
   '-filter',
   'Triangle',
   '-define',
@@ -33,11 +34,38 @@ var args = [
   '-interlace',
   'none',
   '-colorspace',
-  'sRGB',
-  outputPath
+  'sRGB'
 ];
 
-im.convert(args, function (err, stdout, stderr) {
-  if (err) throw err;
-  console.log('stdout:', stdout);
-});
+const read = (dir) =>
+  fs.readdirSync(dir)
+    .reduce((files, file) =>
+      fs.statSync(path.join(dir, file)).isDirectory() ?
+        files.concat(read(path.join(dir, file))) :
+        files.concat(path.join(dir, file)),
+    []);
+
+const getOptions = (input) => {
+  const res = optimizeOptions.slice();
+  res.unshift(input);
+  res.push(input.replace('input', 'output'));
+  return res;
+};
+
+const optimizeAll = () => {
+
+const files = read(inputPath);
+
+fs.mkdir('./output/');
+
+files.forEach((element) => {
+  im.convert(getOptions(element), (err, stdout, stderr) => {
+    if (err) throw err;
+    console.log(element, 'optimized');
+    });
+  });
+};
+
+rimraf('./output/', () => { console.log('cleaned output \n'); optimizeAll();});
+
+
